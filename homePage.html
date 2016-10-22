@@ -1,4 +1,4 @@
-</!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Swerve-Home Page</title>
@@ -17,10 +17,26 @@
 									<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.light_blue-yellow.min.css" />
 										<link rel="stylesheet" type="text/css" href="Swerve/homePageDesign.css">
 			
+
+			<meta name="google-signin-client_id" content="425249400405-039verq2qa12hrdom1s93j6q52iv99rn.apps.googleusercontent.com">
+			<script type="text/javascript">
+				gapi.load('auth2', function(){
+				gapi.auth2.init();
+				});
+			</script>
+			
+
+			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+			<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+			<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+			<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.light_blue-yellow.min.css" />
+			<link rel="stylesheet" type="text/css" href="homePageDesign.css">
+
 	</head>
 		<body>
 				<!-- Uses a header that scrolls with the text, rather than staying
 				  locked at the top -->
+
 				<div class="mdl-layout mdl-js-layout">
 				  <header class="mdl-layout__header mdl-layout__header--scroll">
 				    <div class="mdl-layout__header-row">
@@ -30,6 +46,17 @@
 				     <div class="mdl-layout-spacer"></div>
 				      <!-- Navigation -->
 				      <nav class="mdl-navigation">
+
+				<div class="mdl-layout mdl-js-layout">
+				  <header class="mdl-layout__header mdl-layout__header--scroll">
+				    <div class="mdl-layout__header-row">
+				      <!-- Title -->
+				     <span class="mdl-layout-title">Swerve</span>
+				      <!-- Add spacer, to align navigation to the right -->
+				     <div class="mdl-layout-spacer"></div>
+				      <!-- Navigation -->
+				    <nav class="mdl-navigation">
+
 				        <a class="mdl-navigation__link" href="">Home</a>
 				        <a class="mdl-navigation__link" href="">Map</a>
 				        <a class="mdl-navigation__link" href=""></a>
@@ -46,6 +73,7 @@
 				      <a class="mdl-navigation__link" href=""></a>
 				    </nav>
 				  </div>
+
 					  <main class="mdl-layout__content">
 					    <div class="page-content">
 					    	<!-- Your content goes here -->
@@ -70,6 +98,29 @@
 												</div>
 
 				<a href="homePage.html" onclick="FB.logout();">
+
+				  <main class="mdl-layout__content">
+				    <div class="page-content"><!-- Your content goes here --></div>
+				 </main>
+				</div> -->
+				<script type="text/javascript">
+					function onSignIn(googleUser) {
+				  var profile = googleUser.getBasicProfile();
+				  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				  console.log('Name: ' + profile.getName());
+				  console.log('Image URL: ' + profile.getImageUrl());
+				  console.log('Email: ' + profile.getEmail());
+				}
+				</script>
+				
+				<!-- Google SignIn -->
+				<div class="g-signin2" data-onsuccess="onSignIn"> 
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+					  Sign In
+					</button>
+				</div>
+				<a href="#" onclick="signOut();">
+
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
 					  Sign Out
 					</button></a>
@@ -81,6 +132,7 @@
 				    });
 				  }
 				</script>
+
 				<script>
 			 // This is called with the results from from FB.getLoginStatus().
 				function statusChangeCallback(response) 
@@ -181,5 +233,6 @@
 						
 				
 					
+
 		</body>
 </html>
