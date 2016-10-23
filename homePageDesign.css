@@ -11,8 +11,3 @@ button{
 	top: 50%;
 	position: absolute;
 }
-div.container{
-	align-items: center;
-	align-self: center;
-	justify-content: center;
-}
