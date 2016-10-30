@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Autocomplete</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #origin-input,
+      #destination-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 200px;
+      }
+
+      #origin-input:focus,
+      #destination-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #mode-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        margin-left: 12px;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #mode-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+    </style>
+  </head>
+  <body>
+    <input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location">
+
+    <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location">
+
+    <div id="mode-selector" class="controls">
+      <input type="radio" name="type" id="changemode-walking" checked="checked">
+      <label for="changemode-walking">Walking</label>
+
+      <input type="radio" name="type" id="changemode-transit">
+      <label for="changemode-transit">Transit</label>
+
+      <input type="radio" name="type" id="changemode-driving">
+      <label for="changemode-driving">Driving</label>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var citymap = {
+        high_aggrav_assault_300_n_eutaw_st_CD: { //1
+          center: {lat:39.2929880,lng:-76.6213830},
+          population: 10
+        },
+        high_aggrav_assault_800_george_st_CD: { //2
+          center: {lat:39.2956180,lng:-76.6310690},
+          population: 8
+        },
+        high_shooting_3islamic_wy_division_st_CD: {//3
+          center: {lat:39.304335,lng:-76.633523},
+          population: 20
+        },
+        high_dischrg_firearm_division_st_laurens_st_CD: {//4
+          center: {lat: 39.305126, lng: -76.634522},
+          population: 28
+        },
+        high_stabbing_1200_blk_druid_hill_av_CD: {//5
+          center: {lat: 39.3011229, lng: -76.6278560},
+          population: 15
+        },
+        high_holdup_alarm_100_n_charles_st_CD: {//6
+          center: {lat: 39.2907853, lng: -76.6155635},
+          population: 25
+        },
+        high_arm_person_800_blk_harlem_av_CD: {//7
+          center: {lat: 39.2971010, lng: -76.6309390},
+          population: 30
+        },
+         high_arm_person_200_w_fayette_st_CD: {//8
+          center: {lat: 39.2906959, lng: -76.6181290},
+          population: 6
+        },
+        high_arm_person_1800_blk_maryland_av_CD: {//9
+          center: {lat: 39.3098389, lng: -76.6181960},
+          population: 6
+        },
+        high_armed_person_900_n_howard_st_CD: {//10
+          center: {lat: 39.3016767, lng: -76.6202954},
+          population: 9
+        }
+        
+      };
+      var medcitymap = {
+        med_disorderly_1100_w_north_av_CD: {//1
+          center: {lat: 39.2877737, lng: -76.6136249},
+          population: 15
+        },
+        med_lying_in_street_100_e_lombard_st_CD: {//2
+          center: {lat: 39.2877737, lng: -76.6136249},
+          population: 16
+        },
+        med_auto_theft_1300_st_paul_st_CD: {//3
+          center: {lat: 39.3047610, lng: -76.6146632},
+          population: 20
+        },
+        med_narcotics_outside_2200_blk_callow_av_CD: {//4
+          center: {lat: 39.3128040, lng: -76.6317270},
+          population: 100
+        },
+         med_narcotics_outside_st_paul_st_fayette_st_CD: {//5
+          center: {lat: 39.290429, lng: -76.613907},
+          population: 45
+        },
+        med_narcotics_1700_n_caroline_st_ED: {//5
+          center: {lat: 39.3097740, lng: -76.5986150},
+          population: 50
+        },
+        med_disorderly_900_n_caroline_st_ED: {//5
+          center: {lat: 39.3007599, lng: -76.5984640},
+          population:80
+        },
+        med_family_disturb_2600_e_monument_st_ED: {//5
+          center: {lat: 39.2990803, lng: -76.5807130},
+          population: 70
+        }
+      };
+      var lowcitymap = {
+        low_investigate_600_e_fayette_st_CD: {//1
+          center: {lat: 39.2906737, lng: -76.6071600},
+          population: 16
+        },
+        low_auto_accident_100blk_e_biddle_st_CD: {//1
+          center: {lat: 39.3036337, lng: -76.6140989},
+          population: 50
+        },
+        low_auto_accident_st_paul_st_e_biddle_st_CD: {//1
+          center: {lat: 39.303494, lng: -76.614445},
+          population: 19
+        },
+        low_auto_accident_c_charles_st_w_preston_st_CD: {//1
+          center: {lat: 39.304502, lng: -76.616118},
+          population: 20
+        },
+        low_auto_accident_w_baltimore_st_s_howard_st_CD: {//2
+          center: {lat: 39.289354, lng: -76.619369},
+          population: 25
+        }
+      };
+	  
+	  function initMap() {
+        var origin_place_id = null;
+        var destination_place_id = null;
+        var travel_mode = 'WALKING';
+        var map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeControl: false,
+          center: {lat: 39.2929880,lng:-76.6213830},
+          zoom: 13
+        });
+		
+		for (var city in citymap) {
+          // Add the circle for this city to the map.
+          var cityCircle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: citymap[city].center,
+            radius: Math.sqrt(citymap[city].population) * 100
+          });
+        }
+        for (var city in medcitymap) {
+          // Add the circle for this city to the map.
+          var cityCircle2 = new google.maps.Circle({
+            strokeColor: '#FFFF00',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FFFF00',
+            fillOpacity: 0.35,
+            map: map,
+            center: medcitymap[city].center,
+            radius: Math.sqrt(medcitymap[city].population) * 100
+          });
+        }
+       for (var city in lowcitymap) {
+          // Add the circle for this city to the map.
+          var cityCircle3 = new google.maps.Circle({
+            strokeColor: '#ADFF2F',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#ADFF2F',
+            fillOpacity: 0.35,
+            map: map,
+            center: lowcitymap[city].center,
+            radius: Math.sqrt(lowcitymap[city].population) * 100
+          });
+        }
+		
+		var locations = [
+          ['<b>High Risk: Aggravated Assault</b>', 39.2929880, -76.6213830, 1],
+          ['<b>Aggravted Assault </b> ', 39.2956180,  -76.6310690, 2],
+          ['<b>High Risk: Shooting</b>', 39.304335, -76.633523, 3],
+          ['<b>High Risk: Discharge Firearm</b>', 39.305126, -76.634522, 4],
+          ['<b>High Risk: Stabbing</b>', 39.3011229, -76.6278560, 5],
+          ['<b>High Risk: Holdup Alarm</b>', 39.2907853, -76.6155635, 6],
+          ['<b>High Risk: Armed Person</b>', 39.2971010, -76.6309390, 7],
+          ['<b>High Risk: Armed Person</b>', 39.2906959,   -76.6181290, 8],
+          ['<b>High Risk: Armed Person</b>', 39.3098389,   -76.6181960, 9],
+          ['<b>High Risk: Armed Person</b>', 39.3016767,   -76.6202954, 10],
+          ['<b>Medium Risk: Disorderly</b> ', 39.2877737,   -76.6136249 ,11],
+          ['<b>Medium Risk: Lying in the Street</b> ', 39.2877737,   -76.6136249 , 12],
+          ['<b>Medium Risk: Auto Theft </b> ', 39.3047610,   -76.6146632, 13],
+          ['<b>Medium Risk: Narcotics Outside </b> ', 39.3128040,   -76.6317270 ,14],
+          ['<b>Medium Risk: Narcotics Outside </b> ', 39.290429,   -76.613907 , 15],
+          ['<b>Medium Risk: Narcotics Outside </b> ', 39.3097740,   -76.5986150, 16],
+          ['<b>Medium Risk: Disorderly </b> ',39.3007599,   -76.5984640 ,17],
+          ['<b>Medium Risk: Family Disturb </b> ', 39.2990803,   -76.5807130, 18],
+          ['<b>Low Risk: investigate </b> ', 39.2906737,   -76.6071600 ,19],
+          ['<b>Low Risk: Auto Accident</b>',39.3036337,-76.6140989,20],
+          ['<b>Low Risk: Auto Accident</b>',39.303494,-76.614445,21],
+          ['<b>Low Risk: Auto Accident</b>',39.304502,-76.616118,22],
+          ['<b>Low Risk: Auto Accident</b>',39.289354,-76.619369,23],
+        ];
+        var infowindow = new google.maps.InfoWindow();
+        var marker, i;
+        for (i = 0; i < locations.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(locations[i][0]);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+		
+		
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+          draggable: true,
+          map: map,
+        });
+        directionsDisplay.setMap(map);
+
+        var origin_input = document.getElementById('origin-input');
+        var destination_input = document.getElementById('destination-input');
+        var modes = document.getElementById('mode-selector');
+
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(origin_input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(destination_input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(modes);
+
+        var origin_autocomplete = new google.maps.places.Autocomplete(origin_input);
+        origin_autocomplete.bindTo('bounds', map);
+        var destination_autocomplete =
+            new google.maps.places.Autocomplete(destination_input);
+        destination_autocomplete.bindTo('bounds', map);
+
+        // Sets a listener on a radio button to change the filter type on Places
+        // Autocomplete.
+        function setupClickListener(id, mode) {
+          var radioButton = document.getElementById(id);
+          radioButton.addEventListener('click', function() {
+            travel_mode = mode;
+          });
+        }
+        setupClickListener('changemode-walking', 'WALKING');
+		setupClickListener('changemode-transit', 'TRANSIT');
+        setupClickListener('changemode-driving', 'DRIVING');
+
+        function expandViewportToFitPlace(map, place) {
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);
+          }
+        }
+
+        origin_autocomplete.addListener('place_changed', function() {
+          var place = origin_autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert("Autocomplete's returned place contains no geometry");
+            return;
+          }
+          expandViewportToFitPlace(map, place);
+
+          // If the place has a geometry, store its place ID and route if we have
+          // the other place ID
+          origin_place_id = place.place_id;
+          route(origin_place_id, destination_place_id, travel_mode,
+                directionsService, directionsDisplay);
+        });
+
+        destination_autocomplete.addListener('place_changed', function() {
+          var place = destination_autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert("Autocomplete's returned place contains no geometry");
+            return;
+          }
+          expandViewportToFitPlace(map, place);
+
+          // If the place has a geometry, store its place ID and route if we have
+          // the other place ID
+          destination_place_id = place.place_id;
+          route(origin_place_id, destination_place_id, travel_mode,
+                directionsService, directionsDisplay);
+        });
+
+        function route(origin_place_id, destination_place_id, travel_mode,
+                       directionsService, directionsDisplay) {
+          if (!origin_place_id || !destination_place_id) {
+            return;
+          }
+          directionsService.route({
+            origin: {'placeId': origin_place_id},
+            destination: {'placeId': destination_place_id},
+            travelMode: travel_mode
+          }, function(response, status) {
+            if (status === 'OK') {
+              directionsDisplay.setDirections(response);
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+        }
+      }
+	 
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASbWiNsz6-1Kn_eWRpkIXgf8V_hN_5tZA&libraries=places&callback=initMap"
+        ></script>
+  </body>
+</html>

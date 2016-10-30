@@ -5,69 +5,65 @@
 			<!-- This is the Google Platform Library needed for our code. -->
 			<script src="https://apis.google.com/js/platform.js" async defer></script>
 			<!-- Google Client API-->
-			<meta name="google-signin-client_id" content="425249400405-039verq2qa12hrdom1s93j6q52iv99rn.apps.googleusercontent.com">
-			<script type="text/javascript">
-				gapi.load('auth2', function(){
-				gapi.auth2.init();
-				});
-			</script>
+				<meta name="google-signin-client_id" content="425249400405-039verq2qa12hrdom1s93j6q52iv99rn.apps.googleusercontent.com">
+					<script type="text/javascript">
+						gapi.load('auth2', function(){
+						gapi.auth2.init();
+						});
+					</script>
+						<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+							<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+								<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+									<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.light_blue-yellow.min.css" />
+										<link rel="stylesheet" type="text/css" href="Swerve/homePageDesign.css">
+										
 			
-
-			<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-			<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
-			<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-			<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.light_blue-yellow.min.css" />
-			<link rel="stylesheet" type="text/css" href="homePageDesign.css">
 	</head>
-		<body>
+		<body background="nyCity.jpeg" background-repeat="no-repeat">
 				<!-- Uses a header that scrolls with the text, rather than staying
 				  locked at the top -->
-			<!--	<div class="mdl-layout mdl-js-layout">
+				<div class="mdl-layout mdl-js-layout">
 				  <header class="mdl-layout__header mdl-layout__header--scroll">
 				    <div class="mdl-layout__header-row">
 				      <!-- Title -->
-				   <!--   <span class="mdl-layout-title">Swerve</span>
+				     <span class="mdl-layout-title">Swerve</span>
 				      <!-- Add spacer, to align navigation to the right -->
-				   <!--   <div class="mdl-layout-spacer"></div>
+				     <div class="mdl-layout-spacer"></div>
 				      <!-- Navigation -->
-				   <!--   <nav class="mdl-navigation">
-				        <a class="mdl-navigation__link" href="">Home</a>
-				        <a class="mdl-navigation__link" href="">Map</a>
+				      <nav class="mdl-navigation">
+				        <a class="mdl-navigation__link" href="homePage.html">Home</a>
+				        <a class="mdl-navigation__link" href="Map_Walk_Run_Transit_safe.html">Map</a>
 				        <a class="mdl-navigation__link" href=""></a>
 				        <a class="mdl-navigation__link" href=""></a>
 				      </nav>
 				    </div>
 				  </header>
-				  <div class="mdl-layout__drawer">
-				    <span class="mdl-layout-title">Swerve</span>
-				    <nav class="mdl-navigation">
-				      <a class="mdl-navigation__link" href="">Home</a>
-				      <a class="mdl-navigation__link" href="">Map</a>
-				      <a class="mdl-navigation__link" href=""></a>
-				      <a class="mdl-navigation__link" href=""></a>
-				    </nav>
-				  </div>
-				  <main class="mdl-layout__content">
-				    <div class="page-content"><!-- Your content goes here --></div>
-				<!--  </main>
-				</div> -->
-				<script type="text/javascript">
-					function onSignIn(googleUser) {
-				  var profile = googleUser.getBasicProfile();
-				  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				  console.log('Name: ' + profile.getName());
-				  console.log('Image URL: ' + profile.getImageUrl());
-				  console.log('Email: ' + profile.getEmail());
-				}
-				</script>
-				
-				<!-- Google SignIn -->
-				<div class="g-signin2" data-onsuccess="onSignIn"> 
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
-					  Sign In
-					</button>
-				</div>
-				<a href="#" onclick="signOut();">
+				  
+					  <main class="mdl-layout__content">
+					    <div class="page-content">
+					    	<!-- Your content goes here -->
+						    	<h1 style="text-align: center; color:white">Welcome to Swerve</h1>
+									<h2 style="text-align: center; color:white">Curve the danger and swerve your way to safety!</h2>
+										
+										<script type="text/javascript">
+										function onSignIn(googleUser) {
+										  var profile = googleUser.getBasicProfile();
+										  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+										  console.log('Name: ' + profile.getName());
+										  console.log('Image URL: ' + profile.getImageUrl());
+										  console.log('Email: ' + profile.getEmail());
+										}
+										</script>
+											<!-- Google SignIn -->
+												<div id="parent">
+													<div class="g-signin2" data-onsuccess="onSignIn"> 
+														<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent";>
+														  Sign In
+														</button>
+													</div>
+												</div>
+
+				<a href="homePage.html" onclick="FB.logout();">
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
 					  Sign Out
 					</button></a>
@@ -79,5 +75,105 @@
 				    });
 				  }
 				</script>
+				<script>
+			 // This is called with the results from from FB.getLoginStatus().
+				function statusChangeCallback(response) 
+				{
+					console.log('statusChangeCallback');
+					console.log(response);
+			    // The response object is returned with a status field that lets the
+			    // app know the current login status of the person.
+			    // Full docs on the response object can be found in the documentation
+			    // for FB.getLoginStatus().
+					if (response.status === 'connected') {
+			      // Logged into your app and Facebook.
+			      testAPI();
+			    } else if (response.status === 'not_authorized') {
+			      // The person is logged into Facebook, but not your app.
+			      document.getElementById('status').innerHTML = 'Please log ' +
+			        'into this app.';
+			    } else {
+			      // The person is not logged into Facebook, so we're not sure if
+			      // they are logged into this app or not.
+			      document.getElementById('status').innerHTML = 'Please log ' +
+			        'into Facebook.';
+			    }
+			  }
+			 
+			  // This function is called when someone finishes with the Login
+			  // Button.  See the onlogin handler attached to it in the sample
+			  // code below.
+			  function checkLoginState() {
+			    FB.getLoginStatus(function(response) {
+			      statusChangeCallback(response);
+			    });
+			  }
+
+			  window.fbAsyncInit = function() {
+			  FB.init({
+			    appId      : '183517338763215',
+			    cookie     : true,  // enable cookies to allow the server to access 
+			                        // the session
+			    xfbml      : true,  // parse social plugins on this page
+			    version    : 'v2.5' // use graph api version 2.5
+			  });
+
+			  // Now that we've initialized the JavaScript SDK, we call 
+			  // FB.getLoginStatus().  This function gets the state of the
+			  // person visiting this page and can return one of three states to
+			  // the callback you provide.  They can be:
+			  //
+			  // 1. Logged into your app ('connected')
+			  // 2. Logged into Facebook, but not your app ('not_authorized')
+			  // 3. Not logged into Facebook and can't tell if they are logged into
+			  //    your app or not.
+			  //
+			  // These three cases are handled in the callback function.
+
+			  FB.getLoginStatus(function(response) {
+			    statusChangeCallback(response);
+			  });
+
+			  };
+
+			  // Load the SDK asynchronously
+			  (function(d, s, id) {
+			    var js, fjs = d.getElementsByTagName(s)[0];
+			    if (d.getElementById(id)) return;
+			    js = d.createElement(s); js.id = id;
+			    js.src = "//connect.facebook.net/en_US/sdk.js";
+			    fjs.parentNode.insertBefore(js, fjs);
+			  }(document, 'script', 'facebook-jssdk'));
+
+			  // Here we run a very simple test of the Graph API after login is
+			  // successful.  See statusChangeCallback() for when this call is made.
+			  function testAPI() {
+			    console.log('Welcome!  Fetching your information.... ');
+			    FB.api('/me', function(response) {
+			      console.log('Successful login for: ' + response.name);
+			      document.getElementById('status').innerHTML =
+			        'Thanks for logging in, ' + response.name + '!';
+			    });
+			  }
+			</script>
+
+			<!--
+			  Below we include the Login Button social plugin. This button uses
+			  the JavaScript SDK to present a graphical Login button that triggers
+			  the FB.login() function when clicked.
+			-->
+
+			<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+			</fb:login-button>
+
+			<div id="status">
+			</div>
+				    	</div>
+				 	</main>
+				</div> 
+				
+						
+				
+					
 		</body>
 </html>
